@@ -1,0 +1,25 @@
+# MPLAB build folders
+**/build/
+**/debug/
+**/dist/
+
+# MPLAB private project settings
+**/nbproject/private/
+
+# Precompiled hex files
+*.hex
+
+# SSL keys
+**/SSLKeys/
+
+# Generated MPFS files
+MPFSImg2.*
+
+# OS generated files
+*/Thumbs.db
+*.DS_Store
+
+# Editor backup/temp files
+*.bak
+*.swp
+*.tmp
