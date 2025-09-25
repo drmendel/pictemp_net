@@ -146,7 +146,6 @@
                    displayName="Important Files"
                    projectFiles="true">
       <itemPath>Makefile</itemPath>
-      <itemPath>TCPIP_-_Demo_App.mc3</itemPath>
     </logicalFolder>
     <logicalFolder name="LibraryFiles"
                    displayName="Library Files"
@@ -266,6 +265,9 @@
       <itemPath>../../../Microchip/TCPIP Stack/TCPIP Stack Version.txt</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="C18-PIC18EX_ENC28" type="2">
