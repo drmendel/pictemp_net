@@ -1,5 +1,5 @@
 # KiCad local files
-fp-info-cache
+hardware/fp-info-cache
 hardware/pictempnet-backups
 hardware/pictempnet.kicad_prl
 
@@ -10,9 +10,11 @@ hardware/pictempnet.kicad_prl
 
 # MPLAB private project settings
 **/nbproject/private/
+**/nbproject/Makefile-local*
+**.properties
 
 # Precompiled hex files
-*.hex
+**.hex
 
 # SSL keys
 **/SSLKeys/
@@ -21,10 +23,10 @@ hardware/pictempnet.kicad_prl
 MPFSImg2.*
 
 # OS generated files
-*/Thumbs.db
-*.DS_Store
+**/Thumbs.db
+**.DS_Store
 
 # Editor backup/temp files
-*.bak
-*.swp
-*.tmp
+**.bak
+**.swp
+**.tmp
