@@ -1,0 +1,89 @@
+MICROCHIP SOFTWARE LICENSE AGREEMENT
+===================================
+
+MICROCHIP IS WILLING TO LICENSE THE ACCOMPANYING SOFTWARE AND DOCUMENTATION TO YOU ONLY 
+ON THE CONDITION THAT YOU ACCEPT ALL OF THE FOLLOWING TERMS. BY DOWNLOADING, CLONING, OR 
+USING THIS SOFTWARE, YOU AGREE TO BE BOUND BY THIS AGREEMENT. IF YOU DO NOT ACCEPT THESE 
+TERMS, DO NOT DOWNLOAD OR USE THIS SOFTWARE.
+
+1. DEFINITIONS
+--------------
+"Microchip Products"       : Microchip microcontrollers and digital signal controllers.
+"Licensee Products"        : Products incorporating Microchip Products.
+"Object Code"              : Binary form of the Software, including updates and modifications.
+"Source Code"              : Human-readable code of the Software, including updates and modifications.
+"Third Party"              : Licensee’s agents, clients, customers, or manufacturers.
+"Third Party Products"     : Third Party products incorporating Microchip Products.
+
+2. SOFTWARE LICENSE GRANT
+-------------------------
+Microchip grants Licensee a non-exclusive, non-transferable, worldwide license to:
+a. Use the Software in Licensee or Third Party Products.
+b. Modify Source Code if no Open Source Components interfere with Microchip’s distribution rights, 
+   and notify Third Parties of such modifications.
+c. Distribute the Software to Third Parties, provided they agree to this Agreement.
+d. Sublicense the Software, provided the Third Party agrees to this Agreement.
+e. Port TCP/IP driver files (ENC28J60.c/.h, ENCX24J600.c/.h) to non-Microchip Products 
+   only with a Microchip Ethernet controller.
+f. Use MiWi DE Software only on Microchip Products with Microchip or UBEC UZ2400 radio 
+   transceivers.
+
+3. DOCUMENTATION LICENSE GRANT
+-------------------------------
+Licensee may use the Documentation to support authorized Software use.
+
+4. THIRD PARTY REQUIREMENTS
+---------------------------
+Licensee is responsible for complying with any third-party license terms; Microchip is not liable.
+
+5. OPEN SOURCE COMPONENTS
+-------------------------
+Open Source Components are governed by their own licenses. Microchip restrictions do not override 
+their open-source terms.
+
+6. LICENSEE OBLIGATIONS
+-----------------------
+a. Ensure Third Party compliance.
+b. Do not engage in unauthorized use, modification, or distribution.
+c. Do not remove Microchip copyright or proprietary notices.
+d. Indemnify and hold Microchip harmless from claims arising from Software or Product use.
+
+7. CONFIDENTIALITY
+------------------
+Software, Documentation, and related inventions are proprietary. Licensee must maintain confidentiality, 
+except as legally required.
+
+8. OWNERSHIP OF PROPRIETARY RIGHTS
+----------------------------------
+Microchip retains all rights. Modifications or derivatives not qualifying as “work for hire” are assigned 
+to Microchip. Use of modifications is limited to licensed rights.
+
+9. TERMINATION OF AGREEMENT
+---------------------------
+Non-compliance terminates this Agreement immediately. Licensee must stop using and destroy all copies.
+
+10. WARRANTY DISCLAIMERS
+------------------------
+Software and Documentation are provided "AS IS" without warranty of any kind.
+
+11. LIMITED LIABILITY
+--------------------
+Microchip is not liable for direct or indirect damages. Maximum liability is $1,000 or the amount 
+paid for the Software, whichever is greater.
+
+12. GENERAL
+-----------
+- Governed by Arizona, USA law; disputes resolved in Arizona courts.
+- Parties waive jury trial rights.
+- Licensee may not assign this Agreement without written Microchip approval.
+- Compliance with all export laws is required.
+- Certain rights and obligations survive termination.
+
+Contact:
+Microchip Technology Inc.
+2355 W. Chandler Blvd., Chandler, AZ 85224-6199 USA
+ATTN: Marketing
+
+Copyright (c) 2011 Microchip Technology Inc. All rights reserved.
+License Rev. No. 03-060111
+
