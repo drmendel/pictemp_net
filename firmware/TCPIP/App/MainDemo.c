@@ -286,7 +286,8 @@ int main(void)
     // or part of it) and returns so that other tasks can do their
     // job.
     // If a task needs very long time to do its job, it must be broken
-    // down into smaller pieces so that other tasks can have CPU time.
+    // down into smaller pieces so that other tasks can have CPU time.    
+    
     while(1)
     {
 	#if defined(WF_USE_POWER_SAVE_FUNCTIONS)

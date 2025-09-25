@@ -59,7 +59,7 @@
 #include "TCPIP Stack/TCPIP.h"
 
 
-#define PORTNUM 9764
+#define PORTNUM 2000   // 9764
 #define MAX_CLIENT (3) // Maximum number of simultanous connections accepted by the server.
 
 

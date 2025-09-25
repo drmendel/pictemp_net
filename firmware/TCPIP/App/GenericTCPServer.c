@@ -1,3 +1,88 @@
+#define __GENERICTCPSERVER_C
+
+#include "TCPIPConfig.h"
+
+#if defined(STACK_USE_GENERIC_TCP_SERVER_EXAMPLE)
+
+#include "TCPIP Stack/TCPIP.h"
+#include "temperature_sensor.h"
+
+// Defines which port the server will listen on
+#define SERVER_PORT	2000
+
+void GenericTCPServer(void)
+{
+	BYTE AppBuffer[32];
+    unsigned char TMP_Buffer[TMP_Buffer_Size];           // Buffer to store TMP string
+    WORD AB_Length;
+	WORD wMaxGet, wMaxPut;
+    unsigned int TMP_Inited = 0;
+    unsigned int i; 
+	static TCP_SOCKET	MySocket;
+	static enum _TCPServerState
+	{
+		SM_HOME = 0,
+		SM_LISTENING,
+        SM_CLOSING,
+	} TCPServerState = SM_HOME;
+
+	switch(TCPServerState)
+	{
+		case SM_HOME:
+			// Allocate a socket for this server to listen and accept connections on
+			MySocket = TCPOpen(0, TCP_OPEN_SERVER, SERVER_PORT, TCP_PURPOSE_GENERIC_TCP_SERVER);
+			if(MySocket == INVALID_SOCKET) return;
+			TCPServerState = SM_LISTENING;
+			break;
+
+		case SM_LISTENING:
+			// See if anyone is connected to us
+			if(!TCPIsConnected(MySocket)) return;
+            if(!TMP_Inited)
+            {
+                TMP_Init();
+                TMP_Inited = 1;
+            }
+            
+            // Figure out how many bytes have been received and how many we can transmit.
+			wMaxGet = TCPIsGetReady(MySocket);	// Get TCP RX FIFO byte count
+			wMaxPut = TCPIsPutReady(MySocket);	// Get TCP TX FIFO free space
+    
+            if(wMaxGet > 0) // We have incoming data
+            {
+                // Process all bytes that we can
+                WORD Read_Length = (wMaxGet > sizeof(AppBuffer)) ? sizeof(AppBuffer) : wMaxGet;
+                AB_Length = TCPGetArray(MySocket, AppBuffer, Read_Length);
+                
+                
+                for(i = 0; i < AB_Length; i++) {
+                    
+                    if(AppBuffer[i] != 'T' && AppBuffer[i] != 't') {             
+                        TCPServerState = SM_CLOSING;
+                        break;
+                    }
+                    // READ the temp sensor 
+                    ADC_to_TMP(TMP_Buffer, TMP_Read());
+                    // Put the data to the TX buffer
+                    //          in this case the package is max. 10 bytes "-40.00 °C\0", "125.00 °C\0"
+                    //          we do not need to chunk the buffer to smaller packets
+                    TCPPutArray(MySocket, TMP_Buffer, strlen(TMP_Buffer));
+                    TCPFlush(MySocket);     // Send data immediately
+                }
+			}
+			break;
+
+		case SM_CLOSING:
+			// Close the socket connection.
+            TCPClose(MySocket);
+			TCPServerState = SM_HOME;
+			break;
+	}
+}
+
+#endif //#if defined(STACK_USE_GENERIC_TCP_SERVER_EXAMPLE)
+
+
 /*********************************************************************
  *
  *	Generic TCP Server Example Application
@@ -86,17 +171,6 @@
  *   5) Press Escape to end the demo.
  *
  ********************************************************************/
-#define __GENERICTCPSERVER_C
-
-#include "TCPIPConfig.h"
-
-#if defined(STACK_USE_GENERIC_TCP_SERVER_EXAMPLE)
-
-#include "TCPIP Stack/TCPIP.h"
-
-
-// Defines which port the server will listen on
-#define SERVER_PORT	9760
 
 
 /*****************************************************************************
@@ -123,88 +197,4 @@
   Returns:
   	None
   ***************************************************************************/
-void GenericTCPServer(void)
-{
-	BYTE i;
-	WORD w, w2;
-	BYTE AppBuffer[32];
-	WORD wMaxGet, wMaxPut, wCurrentChunk;
-	static TCP_SOCKET	MySocket;
-	static enum _TCPServerState
-	{
-		SM_HOME = 0,
-		SM_LISTENING,
-        SM_CLOSING,
-	} TCPServerState = SM_HOME;
 
-	switch(TCPServerState)
-	{
-		case SM_HOME:
-			// Allocate a socket for this server to listen and accept connections on
-			MySocket = TCPOpen(0, TCP_OPEN_SERVER, SERVER_PORT, TCP_PURPOSE_GENERIC_TCP_SERVER);
-			if(MySocket == INVALID_SOCKET)
-				return;
-
-			TCPServerState = SM_LISTENING;
-			break;
-
-		case SM_LISTENING:
-			// See if anyone is connected to us
-			if(!TCPIsConnected(MySocket))
-				return;
-
-
-			// Figure out how many bytes have been received and how many we can transmit.
-			wMaxGet = TCPIsGetReady(MySocket);	// Get TCP RX FIFO byte count
-			wMaxPut = TCPIsPutReady(MySocket);	// Get TCP TX FIFO free space
-
-			// Make sure we don't take more bytes out of the RX FIFO than we can put into the TX FIFO
-			if(wMaxPut < wMaxGet)
-				wMaxGet = wMaxPut;
-
-			// Process all bytes that we can
-			// This is implemented as a loop, processing up to sizeof(AppBuffer) bytes at a time.  
-			// This limits memory usage while maximizing performance.  Single byte Gets and Puts are a lot slower than multibyte GetArrays and PutArrays.
-			wCurrentChunk = sizeof(AppBuffer);
-			for(w = 0; w < wMaxGet; w += sizeof(AppBuffer))
-			{
-				// Make sure the last chunk, which will likely be smaller than sizeof(AppBuffer), is treated correctly.
-				if(w + sizeof(AppBuffer) > wMaxGet)
-					wCurrentChunk = wMaxGet - w;
-
-				// Transfer the data out of the TCP RX FIFO and into our local processing buffer.
-				TCPGetArray(MySocket, AppBuffer, wCurrentChunk);
-				
-				// Perform the "ToUpper" operation on each data byte
-				for(w2 = 0; w2 < wCurrentChunk; w2++)
-				{
-					i = AppBuffer[w2];
-					if(i >= 'a' && i <= 'z')
-					{
-						i -= ('a' - 'A');
-						AppBuffer[w2] = i;
-					}
-                    else if(i == 0x1B)   //escape
-                    {
-                        TCPServerState = SM_CLOSING;
-                    }
-				}
-				
-				// Transfer the data out of our local processing buffer and into the TCP TX FIFO.
-				TCPPutArray(MySocket, AppBuffer, wCurrentChunk);
-			}
-
-			// No need to perform any flush.  TCP data in TX FIFO will automatically transmit itself after it accumulates for a while.  If you want to decrease latency (at the expense of wasting network bandwidth on TCP overhead), perform and explicit flush via the TCPFlush() API.
-
-			break;
-
-		case SM_CLOSING:
-			// Close the socket connection.
-            TCPClose(MySocket);
-
-			TCPServerState = SM_HOME;
-			break;
-	}
-}
-
-#endif //#if defined(STACK_USE_GENERIC_TCP_SERVER_EXAMPLE)
